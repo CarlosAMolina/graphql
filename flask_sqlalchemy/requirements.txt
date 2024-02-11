@@ -1,5 +1,5 @@
-Flask
-Flask-GraphQL
-Flask-SQLAlchemy
+Flask==3.0.2
+Flask-GraphQL==2.0.1
+Flask-SQLAlchemy==3.0.5
 graphene-sqlalchemy==2.3.0
-SQLAlchemy
+SQLAlchemy==1.4.51
