@@ -22,7 +22,9 @@ Run the API:
 python app.py
 ```
 
-In the browser, open <http://localhost:5000/graphql>. And execute:
+You can request data in multiple ways:
+
+- In the browser, open <http://localhost:5000/graphql>. And execute:
 
 ```
 {
@@ -38,6 +40,12 @@ In the browser, open <http://localhost:5000/graphql>. And execute:
     }
   }
 }
+```
+
+- Curl request. In a terminal:
+
+```bash
+curl 'http://127.0.0.1:5000/graphql?' -X POST -H 'Content-Type: application/json' --data-raw '{"query":"{\n  allEmployees {\n    edges {\n      node {\n        id\n        name\n        department {\n          name\n        }\n      }\n    }\n  }\n}"}'
 ```
 
 ## Resources
