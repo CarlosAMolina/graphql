@@ -22,6 +22,8 @@ Run the API:
 python app.py
 ```
 
+### Different ways to request data
+
 You can request data in multiple ways:
 
 - In the browser, open <http://localhost:5000/graphql>. And execute:
@@ -55,6 +57,57 @@ You can request data in multiple ways:
     ```bash
     curl http://127.0.0.1:5000/graphql?query=%7BallEmployees%7Bedges%7Bnode%7Bid%20name%20department%7Bname%7D%7D%7D%7D%7D
     ```
+
+### Available queries
+
+To call the `all_employees` `SQLAlchemyConnectionField` in the `schema.py` file:
+
+```bash
+{
+  allEmployees {
+    edges {
+      node {
+        id
+        name
+        department {
+          name
+        }
+      }
+    }
+  }
+}
+```
+
+To call the `all_departments` `SQLAlchemyConnectionField` in the `schema.py` file:
+
+```bash
+{
+  allDepartments {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+}
+```
+
+To call the `resolve_search` function in the `schema.py` file ([tutorial](https://docs.graphene-python.org/projects/sqlalchemy/en/latest/examples/):
+
+```bash
+{
+  search(q: "a") {
+    __typename
+    ... on Employee {
+      name
+    }
+    ... on Department {
+      name
+    }
+  }
+}
+```
 
 ## Resources
 
