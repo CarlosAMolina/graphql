@@ -17,6 +17,14 @@ class Employee(SQLAlchemyObjectType):
 
 
 class Query(graphene.ObjectType):
+    """
+    How to call these ConnectionFields:
+    SQLAlchemyConnectionField | Query to use (see README.md)
+    --------------------------|-----------------------------
+    all_employees             | allEmployees
+    all_departments           | allDepartments
+    """
+
     node = relay.Node.Field()
     # Allows sorting over multiple columns, by default over the primary key
     all_employees = SQLAlchemyConnectionField(Employee.connection)
