@@ -93,7 +93,7 @@ To call the `all_departments` `SQLAlchemyConnectionField` in the `schema.py` fil
 }
 ```
 
-To call the `resolve_search` function in the `schema.py` file ([tutorial](https://docs.graphene-python.org/projects/sqlalchemy/en/latest/examples/):
+To call the `search` function in the `schema.py` file ([tutorial](https://docs.graphene-python.org/projects/sqlalchemy/en/latest/examples/):
 
 ```bash
 {
