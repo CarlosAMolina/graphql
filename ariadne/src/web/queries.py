@@ -32,7 +32,8 @@ def resolve_aggregate_people(*_, function, field: str) -> tp.Optional[tp.Union[i
     https://developer.salesforce.com/docs/platform/graphql/guide/aggregate-examples.html
     """
     field_values = [person[field] for person in data.people if person.get(field) is not None]
-    _assert_all_values_are_int(field_values)
+    if not _are_all_values_int(field_values):
+        raise TypeError
     if len(field_values) == 0:
         return None
     elif function == "avg":
@@ -45,6 +46,5 @@ def resolve_aggregate_people(*_, function, field: str) -> tp.Optional[tp.Union[i
         return sum(field_values)
 
 
-def _assert_all_values_are_int(array):
-    if not all(isinstance(value, numbers.Number) for value in array):
-        raise TypeError
+def _are_all_values_int(array):
+    return all(isinstance(value, numbers.Number) for value in array)
