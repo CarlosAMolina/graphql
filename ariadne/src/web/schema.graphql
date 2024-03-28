@@ -10,6 +10,7 @@ input PeopleFilter{
 
 enum AggregateFunction {
     max
+    min
 }
 
 type Query {
