@@ -15,9 +15,16 @@ Folder to work with the Airadne framework.
 
 ```bash
 {
-  aggregatePeople(function:max, field: "age")
+  numericAggregatePeople(function:max, field: "age")
 }
 ```
+
+```bash
+{
+  dateTimeAggregatePeople(function:max, field: "dateTimeInsertion")
+}
+```
+
 
 ## Resources
 

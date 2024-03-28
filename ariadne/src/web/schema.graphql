@@ -11,16 +11,22 @@ input PeopleFilter{
     minAge: Int
 }
 
-enum AggregateFunction {
+enum NumericAggregateFunction {
     avg
     max
     min
     sum
 }
 
+enum DateTimeAggregateFunction {
+    max
+    min
+}
+
 type Query {
     people(input: PeopleFilter): [Person!]!
-    aggregatePeople(function: AggregateFunction!, field: String!): Float
+    numericAggregatePeople(function: NumericAggregateFunction!, field: String!): Float
+    dateTimeAggregatePeople(function: DateTimeAggregateFunction!, field: String!): Datetime
 }
 
 schema {
