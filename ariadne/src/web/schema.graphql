@@ -1,0 +1,17 @@
+type Person {
+    name: String!
+    age: Int!
+}
+
+input PeopleFilter{
+    maxAge: Int
+    minAge: Int
+}
+
+type Query {
+    people(input: PeopleFilter): [Person!]!
+}
+
+schema {
+    query: Query,
+}
