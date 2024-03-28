@@ -1,3 +1,4 @@
+import numbers
 import typing as tp
 
 from ariadne import QueryType
@@ -27,3 +28,21 @@ def resolve_people(*_, input=None) -> list:
 def resolve_max_age_people(*_) -> tp.Optional[int]:
     ages = [person["age"] for person in data.people if person.get("age") is not None]
     return None if len(ages) == 0 else max(ages)
+
+
+@query.field("aggregatePeople")
+def resolve_aggregate_people(*_, function, field: str) -> tp.Optional[int]:
+    """
+    Examples of aggregation in GraphQL:
+    https://dgraph.io/docs/graphql/queries/aggregate/
+    https://developer.salesforce.com/docs/platform/graphql/guide/aggregate-examples.html
+    """
+    if function == "max":
+        ages = [person[field] for person in data.people if person.get(field) is not None]
+        _assert_int_values(ages)
+        return None if len(ages) == 0 else max(ages)
+
+
+def _assert_int_values(array):
+    if not all(isinstance(value, numbers.Number) for value in array):
+        raise TypeError

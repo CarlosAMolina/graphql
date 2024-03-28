@@ -8,9 +8,14 @@ input PeopleFilter{
     minAge: Int
 }
 
+enum AggregateFunction {
+    max
+}
+
 type Query {
     people(input: PeopleFilter): [Person!]!
     maxAgePeople: Int
+    aggregatePeople(function: AggregateFunction!, field: String!): Int
 }
 
 schema {
