@@ -13,6 +13,12 @@ Folder to work with the Airadne framework.
 }
 ```
 
+```bash
+{
+  aggregatePeople(function:max, field: "age")
+}
+```
+
 ## Resources
 
 [Another project about Airadne](https://github.com/CarlosAMolina/microservice-apis-python)

@@ -24,12 +24,6 @@ def resolve_people(*_, input=None) -> list:
     return filtered
 
 
-@query.field("maxAgePeople")
-def resolve_max_age_people(*_) -> tp.Optional[int]:
-    ages = [person["age"] for person in data.people if person.get("age") is not None]
-    return None if len(ages) == 0 else max(ages)
-
-
 @query.field("aggregatePeople")
 def resolve_aggregate_people(*_, function, field: str) -> tp.Optional[int]:
     """
