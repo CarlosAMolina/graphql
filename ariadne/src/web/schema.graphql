@@ -17,7 +17,7 @@ enum AggregateFunction {
 
 type Query {
     people(input: PeopleFilter): [Person!]!
-    aggregatePeople(function: AggregateFunction!, field: String!): Int
+    aggregatePeople(function: AggregateFunction!, field: String!): Float
 }
 
 schema {

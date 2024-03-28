@@ -35,7 +35,6 @@ def resolve_aggregate_people(*_, function, field: str) -> tp.Optional[tp.Union[i
     _assert_all_values_are_int(field_values)
     if len(field_values) == 0:
         return None
-    # TODO floats are casted to int.
     elif function == "avg":
         return sum(field_values) / len(field_values)
     elif function == "max":
