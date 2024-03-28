@@ -25,7 +25,7 @@ def resolve_people(*_, input=None) -> list:
 
 
 @query.field("aggregatePeople")
-def resolve_aggregate_people(*_, function, field: str) -> tp.Optional[int]:
+def resolve_aggregate_people(*_, function, field: str) -> tp.Optional[tp.Union[int, float]]:
     """
     Examples of aggregation in GraphQL:
     https://dgraph.io/docs/graphql/queries/aggregate/
@@ -35,10 +35,15 @@ def resolve_aggregate_people(*_, function, field: str) -> tp.Optional[int]:
     _assert_all_values_are_int(field_values)
     if len(field_values) == 0:
         return None
+    # TODO floats are casted to int.
+    elif function == "avg":
+        return sum(field_values) / len(field_values)
     elif function == "max":
         return max(field_values)
     elif function == "min":
         return min(field_values)
+    elif function == "sum":
+        return sum(field_values)
 
 
 def _assert_all_values_are_int(array):

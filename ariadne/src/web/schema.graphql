@@ -9,8 +9,10 @@ input PeopleFilter{
 }
 
 enum AggregateFunction {
+    avg
     max
     min
+    sum
 }
 
 type Query {
