@@ -1,6 +1,9 @@
+scalar Datetime
+
 type Person {
     name: String!
     age: Int
+    dateTimeInsertion: Datetime!
 }
 
 input PeopleFilter{
