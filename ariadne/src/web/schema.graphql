@@ -1,6 +1,6 @@
 type Person {
     name: String!
-    age: Int!
+    age: Int
 }
 
 input PeopleFilter{
@@ -10,6 +10,7 @@ input PeopleFilter{
 
 type Query {
     people(input: PeopleFilter): [Person!]!
+    maxAgePeople: Int
 }
 
 schema {

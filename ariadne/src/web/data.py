@@ -9,7 +9,6 @@ people = [
     },
     {
         "name": "Al",
-        "age": 13,
     },
     {
         "name": "Nick",
