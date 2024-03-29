@@ -1,0 +1,33 @@
+meta {
+  name: allDepartments
+  type: graphql
+  seq: 3
+}
+
+post {
+  url: {{url}}
+  body: graphql
+  auth: none
+}
+
+auth:basic {
+  username:
+  password:
+}
+
+auth:bearer {
+  token:
+}
+
+body:graphql {
+  {
+    allDepartments {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+  }
+}
