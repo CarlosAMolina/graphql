@@ -1,6 +1,7 @@
 ## Run
 
 ```bash
+cd src
 python schema.py
 ```
 
