@@ -57,54 +57,11 @@ You can request data in multiple ways:
 
 ### Available queries
 
-To call the `all_employees` `SQLAlchemyConnectionField` in the `schema.py` file:
+To call the `all_employees` `SQLAlchemyConnectionField` in the `schema.py` file, you can see the GraphQL body to send in the `bruno/graphql/allEmployees.bru` file.
 
-```bash
-{
-  allEmployees {
-    edges {
-      node {
-        id
-        name
-        department {
-          name
-        }
-      }
-    }
-  }
-}
-```
+To call the `all_departments` `SQLAlchemyConnectionField` in the `schema.py` file, you can see the GraphQL body to send in the `bruno/graphql/allDepartments.bru` file.
 
-To call the `all_departments` `SQLAlchemyConnectionField` in the `schema.py` file:
-
-```bash
-{
-  allDepartments {
-    edges {
-      node {
-        id
-        name
-      }
-    }
-  }
-}
-```
-
-To call the `search` function in the `schema.py` file ([tutorial](https://docs.graphene-python.org/projects/sqlalchemy/en/latest/examples/):
-
-```bash
-{
-  search(q: "a") {
-    __typename
-    ... on Employee {
-      name
-    }
-    ... on Department {
-      name
-    }
-  }
-}
-```
+To call the `search` function in the `schema.py` file ([tutorial](https://docs.graphene-python.org/projects/sqlalchemy/en/latest/examples/), you can see the GraphQL body to send in the `bruno/graphql/search.bru` file.
 
 ## Resources
 
