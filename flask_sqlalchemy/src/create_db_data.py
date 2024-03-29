@@ -16,7 +16,3 @@ def run():
     for row in rows_to_insert:
         models.db_session.add(row)
     models.db_session.commit()
-
-
-if __name__ == "__main__":
-    run()

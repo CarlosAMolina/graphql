@@ -2,23 +2,10 @@
 
 Install `requirements.txt`.
 
-Important. To run the api, work in the `src` folder:
-
-```bash
-cd src
-```
-
-If the `database.sqlite3` file does not exist, run:
-
-```bash
-# In the `src` folder.
-python create_db_data.py
-```
-
 Run the API:
 
 ```bash
-# In the `src` folder.
+cd src
 python app.py
 ```
 
