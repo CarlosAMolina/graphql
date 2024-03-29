@@ -55,6 +55,16 @@ You can request data in multiple ways:
     curl http://127.0.0.1:5000/graphql?query=%7BallEmployees%7Bedges%7Bnode%7Bid%20name%20department%7Bname%7D%7D%7D%7D%7D
     ```
 
+## Theory
+
+### Libraries
+
+[Libraries summary](https://docs.graphene-python.org/projects/sqlalchemy/en/latest/starter/):
+
+- [Graphene](https://pypi.org/project/graphene/): Python library for building GraphQL APIs, for building GraphQL schemas/types.
+- [SQLAlchemy](https://pypi.org/project/SQLAlchemy/): ORM (Object-Relational Mapping) tool for working with databases.
+- [graphene-sqlalchemy](https://pypi.org/project/graphene-sqlalchemy/): Python library, a SQLAlchemy integration for Graphene.
+
 ## Resources
 
 Tutorial
