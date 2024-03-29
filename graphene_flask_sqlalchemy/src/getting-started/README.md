@@ -2,7 +2,7 @@
 
 ```bash
 cd src
-python schema.py
+python app.py
 ```
 
 ## Resources

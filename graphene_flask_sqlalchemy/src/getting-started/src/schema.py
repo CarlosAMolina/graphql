@@ -5,6 +5,8 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 import models
 
 
+# Note. It is not necessary to use ActiveSQLAlchemyObjectType, `User`
+# can inherit from SQLAlchemyObjectType directly.
 class ActiveSQLAlchemyObjectType(SQLAlchemyObjectType):
     class Meta:
         abstract = True
