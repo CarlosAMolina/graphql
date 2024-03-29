@@ -1,7 +1,7 @@
 {
     "executionEnvironments": [
         {
-            "root": "ariadne/src"
+            "root": "graphene_flask_sqlalchemy/src/getting-started"
         }
     ]
 }
