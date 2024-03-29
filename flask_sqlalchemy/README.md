@@ -11,7 +11,7 @@ python app.py
 
 ## Endpoints
 
-- `allDepartments`. GraphQL body example in the `bruno/graphql/allDepartments.bru` file.
+- `allDepartments`. GraphQL body example in this [file](bruno/graphql/allDepartments.bru).
 - `allEmployees`. GraphQL body example in the `bruno/graphql/allEmployees.bru` file.
 - `search`. GraphQL body example in the `bruno/graphql/search.bru` file. [Search all Models with Union tutorial](https://docs.graphene-python.org/projects/sqlalchemy/en/latest/examples/).
 
