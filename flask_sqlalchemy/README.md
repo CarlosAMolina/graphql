@@ -9,6 +9,12 @@ cd src
 python app.py
 ```
 
+## Endpoints
+
+- `allDepartments`
+- `allEmployees`
+- `search`
+
 ### Different ways to request data
 
 You can request data in multiple ways:
