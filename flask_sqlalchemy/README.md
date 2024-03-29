@@ -19,6 +19,10 @@ python app.py
 
 You can request data in multiple ways:
 
+- Using [Bruno](https://www.usebruno.com/)
+  - In the Bruno GUI, select `Import Collection > Bruno Collection` and select the `bruno/graphql.json` file. When asking for the location, select the same `bruno` folder where the `graphql.json` file is.
+  - Copy the environment files to the new `graphql` folder that has been created: `cp -r environments/ graphql`.
+
 - In the browser, open <http://localhost:5000/graphql>. And execute:
 
 ```
