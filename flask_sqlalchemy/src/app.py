@@ -20,7 +20,6 @@ def shutdown_session(exception=None):
 
 
 if __name__ == "__main__":
-    print("Start creating db")
     create_db_data.run()
     print("Start run server")
     app.run()
