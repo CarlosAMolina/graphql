@@ -8,14 +8,14 @@ def run():
         "engineering": Department(name="Engineering"),
         "hr": Department(name="Human Resources"),
     }
-    employees = {
-        "peter": Employee(name="Peter", department=departments["engineering"]),
-        "roy": Employee(name="Roy", department=departments["engineering"]),
-        "tracy": Employee(name="Tracy", department=departments["hr"]),
-    }
+    employees = [
+        Employee(name="Peter", department=departments["engineering"]),
+        Employee(name="Roy", department=departments["engineering"]),
+        Employee(name="Tracy", department=departments["hr"]),
+    ]
     for department in departments.values():
         db_session.add(department)
-    for employee in employees.values():
+    for employee in employees:
         db_session.add(employee)
     db_session.commit()
 
