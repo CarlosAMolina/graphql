@@ -1,10 +1,20 @@
 import graphene
+import sqlalchemy as sa
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 import models
 
 
-class User(SQLAlchemyObjectType):
+class ActiveSQLAlchemyObjectType(SQLAlchemyObjectType):
+    class Meta:
+        abstract = True
+
+    @classmethod
+    def get_node(cls, info, id):
+        return cls.get_query(info).filter(sa.and_(cls._meta.model.deleted_at is None, cls._meta.model.id == id)).first()
+
+
+class User(ActiveSQLAlchemyObjectType):
     class Meta:
         model = models.UserModel
         # use `only_fields` to only expose specific fields ie "name"
