@@ -11,17 +11,9 @@ python app.py
 
 ## Endpoints
 
-- `allDepartments`
-- `allEmployees`
-- `search`
-
-### Available queries
-
-To call the `all_employees` `SQLAlchemyConnectionField` in the `schema.py` file, you can see the GraphQL body to send in the `bruno/graphql/allEmployees.bru` file.
-
-To call the `all_departments` `SQLAlchemyConnectionField` in the `schema.py` file, you can see the GraphQL body to send in the `bruno/graphql/allDepartments.bru` file.
-
-To call the `search` function in the `schema.py` file ([Search all Models with Union tutorial](https://docs.graphene-python.org/projects/sqlalchemy/en/latest/examples/), you can see the GraphQL body to send in the `bruno/graphql/search.bru` file.
+- `allDepartments`. GraphQL body example in the `bruno/graphql/allDepartments.bru` file.
+- `allEmployees`. GraphQL body example in the `bruno/graphql/allEmployees.bru` file.
+- `search`. GraphQL body example in the `bruno/graphql/search.bru` file. [Search all Models with Union tutorial](https://docs.graphene-python.org/projects/sqlalchemy/en/latest/examples/).
 
 ### Different ways to request data
 
