@@ -12,7 +12,7 @@ If the `database.sqlite3` file does not exist, run:
 
 ```bash
 # In the `src` folder.
-python script_create_db_data.py
+python create_db_data.py
 ```
 
 Run the API:
