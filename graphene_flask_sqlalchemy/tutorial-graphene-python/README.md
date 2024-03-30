@@ -14,7 +14,7 @@ This folder contains the sections of this [tutorial](https://docs.graphene-pytho
 
 ## Run queries
 
-An explanation and files to run queries using Bruno, GraphiQL and curl is in [this README.md file](sqlalchemy-flask-tutorial/README.md).
+An explanation and files to run queries using Bruno, GraphiQL and curl is in [this README.md file](src/sqlalchemy-flask-tutorial/README.md).
 
 ## Resources
 
