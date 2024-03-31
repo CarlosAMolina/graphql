@@ -21,37 +21,39 @@ def init_db():
         _insert_db_data()
 
 
+users_data = [
+    {
+        "id": 1,
+        "name": "John",
+        "age": 20,
+        "creation_date_time": datetime.datetime(2024, 3, 20, 17, 20, 40),
+    },
+    {
+        "id": 2,
+        "name": "Jane",
+        "age": 21,
+        "creation_date_time": datetime.datetime(2023, 6, 17, 8, 15, 23),
+    },
+    {
+        "id": 3,
+        "name": "Al",
+        "creation_date_time": datetime.datetime(2024, 10, 5, 8, 20, 23),
+    },
+    {
+        "id": 4,
+        "name": "Nick",
+        "age": 41,
+        "creation_date_time": datetime.datetime(2020, 12, 20, 20, 15, 42),
+    },
+]
+
+
 def _exists_db_file(db_path_name: str) -> bool:
     return pathlib.Path(db_path_name).is_file()
 
 
 def _insert_db_data():
     models.Base.metadata.create_all(bind=engine)
-    users_data = [
-        {
-            "id": 1,
-            "name": "John",
-            "age": 20,
-            "creation_date_time": datetime.datetime(2024, 3, 20, 17, 20, 40),
-        },
-        {
-            "id": 2,
-            "name": "Jane",
-            "age": 21,
-            "creation_date_time": datetime.datetime(2023, 6, 17, 8, 15, 23),
-        },
-        {
-            "id": 3,
-            "name": "Al",
-            "creation_date_time": datetime.datetime(2024, 10, 5, 8, 20, 23),
-        },
-        {
-            "id": 4,
-            "name": "Nick",
-            "age": 41,
-            "creation_date_time": datetime.datetime(2020, 12, 20, 20, 15, 42),
-        },
-    ]
     users = [
         models.UserModel(
             id=user_data["id"],
