@@ -18,28 +18,7 @@ def shutdown_session(exception=None):
     database.db_session.remove()
 
 
-# TODO move to test folder
-def test_all_users():
-    query = """
-        {
-          allUsers {
-            edges {
-              node {
-                id,
-                name,
-                age,
-                creationDateTime
-              }
-            }
-          }
-        }
-    """
-    result = schema.execute(query, context_value={"session": database.db_session})
-    print(result)
-
-
 if __name__ == "__main__":
     database.init_db()
     print("Start run server")
-    # TODO UNCOMMENT app.run()
-    test_all_users()
+    app.run()

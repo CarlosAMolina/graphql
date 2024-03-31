@@ -7,21 +7,22 @@ import sqlalchemy as sa
 import models
 
 
-db_file_name = "database.sqlite3"
-engine = sa.create_engine(f"sqlite:///{db_file_name}")
+db_path_name = "/tmp/database.sqlite3"
+url = f"sqlite:///{db_path_name}"
+engine = sa.create_engine(url)
 db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
 
 def init_db():
-    if _exists_db_file():
-        print("DB already exists")
+    if _exists_db_file(db_path_name):
+        print(f"DB already exists: {db_path_name}")
     else:
-        print("Start creating DB")
+        print(f"Start creating DB: {db_path_name}")
         _insert_db_data()
 
 
-def _exists_db_file() -> bool:
-    return pathlib.Path(db_file_name).is_file()
+def _exists_db_file(db_path_name: str) -> bool:
+    return pathlib.Path(db_path_name).is_file()
 
 
 def _insert_db_data():
