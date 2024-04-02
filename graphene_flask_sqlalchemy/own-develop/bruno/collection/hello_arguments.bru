@@ -1,0 +1,22 @@
+meta {
+  name: hello_arguments
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{protocol}}://{{domain}}:{{port}}/{{path}}
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  query {
+    hello
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.data.hello: eq Hello stranger!
+}
