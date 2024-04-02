@@ -1,0 +1,40 @@
+meta {
+  name: all_users_pagination
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: {{protocol}}://{{domain}}:{{port}}/{{path}}
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  {
+    allUsers(sort: [NAME_ASC], after:"YXJyYXljb25uZWN0aW9uOjA=", first:2) {
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      edges {
+        cursor
+        node {
+          id,
+          name,
+          age,
+          creationDateTime
+        }
+      }
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.data.allUsers.edges.length: eq 2
+  res.body.data.allUsers.edges[0].node.name: eq Jane
+  res.body.data.allUsers.edges[1].node.name: eq John
+}
