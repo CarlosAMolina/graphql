@@ -1,0 +1,31 @@
+meta {
+  name: all_users
+  type: graphql
+  seq: 1
+}
+
+post {
+  url: {{protocol}}://{{domain}}:{{port}}/{{path}}
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  {
+    allUsers {
+      edges {
+        node {
+          id,
+          name,
+          age,
+          creationDateTime
+        }
+      }
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.data.allUsers.edges.length: eq 4
+}

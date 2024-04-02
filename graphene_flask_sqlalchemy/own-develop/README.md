@@ -11,29 +11,8 @@ python app.py
 
 ## Endpoints
 
-```
-{
-  allUsers {
-    edges {
-      node {
-        id,
-        name,
-        age,
-        creationDateTime
-      }
-    }
-  }
-}
-```
+See examples in [this path files](bruno/collection).
 
-```
-{
-  hello(firstName: "John")
-}
-```
-
-```
-{
-  goodbye
-}
-```
+- all_users
+- goodbye
+- hello
