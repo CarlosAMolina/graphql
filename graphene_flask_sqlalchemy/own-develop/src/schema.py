@@ -4,6 +4,7 @@ from graphene import Schema
 from graphene import String
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy import SQLAlchemyObjectType
+import graphene
 
 import models
 
@@ -17,6 +18,18 @@ class User(SQLAlchemyObjectType):
         interfaces = (relay.Node,)
 
 
+# Implement filtering: https://jeffersonheard.github.io/python/graphql/2018/12/08/graphene-python.html
+# Sort must be disabled when using in the query.
+class UserConn(SQLAlchemyConnectionField):
+    @classmethod
+    def get_query(cls, model, info, **args):
+        print("Init UserConn")
+        print(args)
+        if "name" in args:
+            return model.query.filter_by(name=args["name"])
+        return model.query
+
+
 class Query(ObjectType):
     # I think it can be commented.
     # https://docs.graphene-python.org/en/latest/relay/nodes/#node-root-field
@@ -25,12 +38,13 @@ class Query(ObjectType):
     # By default, the argument name will automatically be camel-based into firstName in the generated schema
     hello = String(first_name=String(default_value="stranger"))
     goodbye = String()
-    # Gives access to relay pagination, sorting and filtering.
+    # Gives access to relay pagination and sorting.
     # I think that it avoid us to create a resolve function.
     # https://docs.graphene-python.org/projects/sqlalchemy/en/latest/relay/
     # Sort query example:
     # https://github.com/graphql-python/graphene-sqlalchemy/blob/master/examples/flask_sqlalchemy/app.py
     all_users = SQLAlchemyConnectionField(User.connection)
+    all_users_filter = UserConn(User, sort=None, args={"name": graphene.Argument(graphene.String)})
 
     # our Resolver method takes the GraphQL context (root, info) as well as
     # Argument (first_name) for the Field and returns data for the query Response
