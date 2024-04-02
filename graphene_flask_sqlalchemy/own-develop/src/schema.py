@@ -28,6 +28,8 @@ class Query(ObjectType):
     # Gives access to relay pagination, sorting and filtering.
     # I think that it avoid us to create a resolve function.
     # https://docs.graphene-python.org/projects/sqlalchemy/en/latest/relay/
+    # Sort query example:
+    # https://github.com/graphql-python/graphene-sqlalchemy/blob/master/examples/flask_sqlalchemy/app.py
     all_users = SQLAlchemyConnectionField(User.connection)
 
     # our Resolver method takes the GraphQL context (root, info) as well as
