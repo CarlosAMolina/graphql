@@ -1,9 +1,9 @@
+from flask import g
 from graphene import Int
 from graphene import ObjectType
 from graphene import relay
 from graphene import Schema
 from graphene import String
-from graphene_sqlalchemy import get_query
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene_sqlalchemy.fields import default_connection_field_factory
@@ -43,8 +43,7 @@ class CountableConnection(graphene.relay.Connection):
 
     @staticmethod
     def resolve_totalCount(root, info, *args, **kwargs):
-        model = models.UserModel  # TODO not use fixed model.
-        query = get_query(model, info.context)
+        query = g.custom_query
         result = query.count()
         return result
 
@@ -124,6 +123,44 @@ class UserFilter(FilterSet):
         fields = get_filter_fields(models.UserModel)
 
 
+class PaginationFilterableConnectionField(FilterableConnectionField):
+    def __init__(self, *args, **kwargs):
+        self.kwargs = dict(**kwargs)
+        if "connection" not in kwargs:
+            raise ValueError("Connection must exists")
+        kwargs["args"] = {
+            "limit": graphene.Int(),
+            "offset": graphene.Int(),
+            "doquery": graphene.Boolean(),
+            "group_by": graphene.List(graphene.String),
+            "columns": graphene.List(graphene.String),
+            "labels": graphene.List(graphene.String),
+        }
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def get_query(cls, model, info, sort=None, **args):
+        query_to_return = super().get_query(model, info, sort, **args)
+        if "group_by" in args and args["group_by"] != []:
+            query_to_return = cls._apply_group_by_query(cls, query_to_return, model, args["group_by"])
+        query_to_return = cls._add_limit_and_offset_to_query(cls, query_to_return, **args)
+        if "doquery" in args:
+            g.custom_query = query_to_return
+        return query_to_return if args.get("doquery", True) else []
+
+    def _add_limit_and_offset_to_query(self, query, **args):
+        if "limit" in args:
+            query = query.limit(args["limit"])
+        if "offset" in args:
+            query = query.offset(args["offset"])
+        return query
+
+    def _apply_group_by_query(self, query, model, fields):
+        model_fields = [getattr(model, item) for item in fields]
+        query = query.group_by(*model_fields)
+        return query
+
+
 class Query(ObjectType):
     # I think it can be commented.
     # https://docs.graphene-python.org/en/latest/relay/nodes/#node-root-field
@@ -151,7 +188,9 @@ class Query(ObjectType):
     https://developer.salesforce.com/docs/platform/graphql/guide/aggregate-examples.html
     """
     aggregate_users_int = Int(function_=String())
-    aggregate_users = FilterableConnectionField(connection=UserObj, filters=UserFilter(), sort=UserObj.sort_argument())
+    aggregate_users = PaginationFilterableConnectionField(
+        connection=UserObj, filters=UserFilter(), sort=UserObj.sort_argument()
+    )
 
     # our Resolver method takes the GraphQL context (root, info) as well as
     # Argument (first_name) for the Field and returns data for the query Response
