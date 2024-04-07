@@ -2,6 +2,7 @@ from graphene import ObjectType
 from graphene import relay
 from graphene import Schema
 from graphene import String
+from graphene import Int
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy import SQLAlchemyObjectType
 import graphene
@@ -45,6 +46,12 @@ class Query(ObjectType):
     # https://github.com/graphql-python/graphene-sqlalchemy/blob/master/examples/flask_sqlalchemy/app.py
     all_users = SQLAlchemyConnectionField(User.connection)
     all_users_filter = UserConn(User, sort=None, args={"name": graphene.Argument(graphene.String)})
+    """
+    Examples of aggregation in GraphQL:
+    https://dgraph.io/docs/graphql/queries/aggregate/
+    https://developer.salesforce.com/docs/platform/graphql/guide/aggregate-examples.html
+    """
+    aggregate_users_int = Int(function_=String())
 
     # our Resolver method takes the GraphQL context (root, info) as well as
     # Argument (first_name) for the Field and returns data for the query Response
@@ -53,6 +60,11 @@ class Query(ObjectType):
 
     def resolve_goodbye(root, info) -> str:
         return "See ya!"
+
+    def resolve_aggregate_users_int(root, info, function_) -> int:
+        if function_ == "count":
+            return 3  # TODO count db values
+        raise ValueError(function_)
 
 
 schema = Schema(query=Query)

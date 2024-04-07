@@ -1,7 +1,7 @@
 meta {
   name: hello_no_arguments
   type: graphql
-  seq: 6
+  seq: 7
 }
 
 post {
@@ -12,11 +12,11 @@ post {
 
 body:graphql {
   query {
-    hello (firstName: "John")
+    hello
   }
 }
 
 assert {
   res.status: eq 200
-  res.body.data.hello: eq Hello John!
+  res.body.data.hello: eq Hello stranger!
 }

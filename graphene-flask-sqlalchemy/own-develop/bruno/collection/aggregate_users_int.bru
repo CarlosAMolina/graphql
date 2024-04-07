@@ -1,7 +1,7 @@
 meta {
-  name: goodbye
+  name: aggregate_users_int
   type: graphql
-  seq: 6
+  seq: 1
 }
 
 post {
@@ -11,12 +11,12 @@ post {
 }
 
 body:graphql {
-  query {
-    goodbye
+  {
+    aggregateUsersInt(function_: "count")
   }
 }
 
 assert {
   res.status: eq 200
-  res.body.data.goodbye: eq See ya!
+  res.body.data.allUsers.edges.length: eq 4
 }
