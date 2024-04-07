@@ -28,6 +28,7 @@ body:graphql {
 
 assert {
   res.status: eq 200
-  res.body.data.allUsersFilter.edges.length: eq 1
-  res.body.data.allUsersFilter.edges[0].node.name: eq Al
+  res.body.data.allUsersFilter.edges.length: eq 2
+  res.body.data.allUsersFilter.edges[0].node.name: eq John
+  res.body.data.allUsersFilter.edges[1].node.name: eq Al
 }
