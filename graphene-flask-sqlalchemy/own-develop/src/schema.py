@@ -40,12 +40,19 @@ class CountableConnection(graphene.relay.Connection):
         abstract = True
 
     totalCount = graphene.Int()
+    maxInt = graphene.Int()
 
     @staticmethod
-    def resolve_totalCount(root, info, *args, **kwargs):
+    def resolve_totalCount(root, info, *args, **kwargs) -> int:
         query = g.custom_query
         result = query.count()
         return result
+
+    @staticmethod
+    def resolve_maxInt(root, info, *args, **kwargs) -> int:
+        breakpoint()
+        column = kwargs["column"]
+        raise ValueError(function_)
 
 
 class CountableSQLAlchemyObjectType(SQLAlchemyObjectType):

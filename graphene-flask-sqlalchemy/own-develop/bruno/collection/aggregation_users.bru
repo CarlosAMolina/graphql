@@ -12,8 +12,8 @@ post {
 
 body:graphql {
   {
-    aggregationUsers {
-      totalCount
+    aggregationUsers(column:"foo") {
+      maxInt
     }
   }
 }
