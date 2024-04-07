@@ -17,7 +17,7 @@ class UserFilter(FilterSet):
     class Meta:
         model = models.UserModel
         fields = {
-            "name": ["in"],
+            "name": ["in", "like", "ilike"],
         }
 
     @staticmethod
