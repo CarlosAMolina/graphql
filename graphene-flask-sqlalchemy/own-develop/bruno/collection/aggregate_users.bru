@@ -1,7 +1,7 @@
 meta {
-  name: aggregate_users_int
+  name: aggregate_users
   type: graphql
-  seq: 2
+  seq: 1
 }
 
 post {
@@ -11,12 +11,14 @@ post {
 }
 
 body:graphql {
-  {
-    aggregateUsersInt(function_: "count")
+  query {
+    aggregateUsers {
+      totalCount
+    }
   }
 }
 
 assert {
   res.status: eq 200
-  res.body.data.aggregateUsersInt: eq 4
+  res.body.data.aggregateUsers.totalCount: eq 4
 }

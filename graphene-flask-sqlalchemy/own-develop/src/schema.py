@@ -1,10 +1,14 @@
+from graphene import Int
 from graphene import ObjectType
 from graphene import relay
 from graphene import Schema
 from graphene import String
-from graphene import Int
+from graphene_sqlalchemy import get_query
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy import SQLAlchemyObjectType
+from graphene_sqlalchemy.fields import default_connection_field_factory
+from graphene_sqlalchemy_filter import FilterableConnectionField
+from graphene_sqlalchemy_filter import FilterSet
 import graphene
 
 import models
@@ -29,6 +33,95 @@ class UserConn(SQLAlchemyConnectionField):
         if "country" in args:
             query = query.filter_by(country=args["country"])
         return query
+
+
+class CountableConnection(graphene.relay.Connection):
+    class Meta:
+        abstract = True
+
+    totalCount = graphene.Int()
+
+    @staticmethod
+    def resolve_totalCount(root, info, *args, **kwargs):
+        model = models.UserModel  # TODO not use fixed model.
+        query = get_query(model, info.context)
+        result = query.count()
+        return result
+
+
+class CountableSQLAlchemyObjectType(SQLAlchemyObjectType):
+    class Meta:
+        abstract = True
+
+    @classmethod
+    def __init_subclass_with_meta__(
+        cls,
+        model=None,
+        registry=None,
+        skip_registry=False,
+        only_fields=(),
+        exclude_fields=(),
+        connection=None,
+        connection_class=CountableConnection,
+        use_connection=None,
+        interfaces=(),
+        id=None,
+        connection_field_factory=default_connection_field_factory,  # TODO try not use default_connection_field_factory
+        _meta=None,
+        **options,
+    ):
+        super().__init_subclass_with_meta__(
+            model,
+            registry,
+            skip_registry,
+            only_fields,
+            exclude_fields,
+            connection,
+            connection_class,
+            use_connection,
+            interfaces,
+            id,
+            connection_field_factory,
+            _meta,
+            **options,
+        )
+
+
+class UserObj(CountableSQLAlchemyObjectType):
+    class Meta:
+        model = models.UserModel
+        interfaces = (graphene.relay.Node,)
+
+
+ALL_OPERATIONS = [
+    "eq",
+    "ne",
+    "like",
+    "ilike",
+    "is_null",
+    "in",
+    "not_in",
+    "lt",
+    "lte",
+    "gt",
+    "gte",
+    "range",
+]
+
+
+def get_filter_fields(model, operations=ALL_OPERATIONS):
+    columns = get_columns_from_model(model)
+    return {column: operations for column in columns}
+
+
+def get_columns_from_model(model):
+    return model().__table__.columns.keys()
+
+
+class UserFilter(FilterSet):
+    class Meta:
+        model = models.UserModel
+        fields = get_filter_fields(models.UserModel)
 
 
 class Query(ObjectType):
@@ -58,6 +151,7 @@ class Query(ObjectType):
     https://developer.salesforce.com/docs/platform/graphql/guide/aggregate-examples.html
     """
     aggregate_users_int = Int(function_=String())
+    aggregate_users = FilterableConnectionField(connection=UserObj, filters=UserFilter(), sort=UserObj.sort_argument())
 
     # our Resolver method takes the GraphQL context (root, info) as well as
     # Argument (first_name) for the Field and returns data for the query Response
