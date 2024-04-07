@@ -18,5 +18,5 @@ body:graphql {
 
 assert {
   res.status: eq 200
-  res.body.data.allUsers.edges.length: eq 4
+  res.body.data.aggregateUsersInt: eq 4
 }

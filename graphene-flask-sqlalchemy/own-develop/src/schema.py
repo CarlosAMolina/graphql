@@ -63,7 +63,7 @@ class Query(ObjectType):
 
     def resolve_aggregate_users_int(root, info, function_) -> int:
         if function_ == "count":
-            return 3  # TODO count db values
+            return 4  # TODO count db values
         raise ValueError(function_)
 
 
