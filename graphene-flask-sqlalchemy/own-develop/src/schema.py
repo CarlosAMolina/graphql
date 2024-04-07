@@ -24,9 +24,10 @@ class User(SQLAlchemyObjectType):
 class UserConn(SQLAlchemyConnectionField):
     @classmethod
     def get_query(cls, model, info, **args):
+        query = model.query
         if "name" in args:
-            return model.query.filter_by(name=args["name"])
-        return model.query
+            query = query.filter_by(name=args["name"])
+        return query
 
 
 class Query(ObjectType):
