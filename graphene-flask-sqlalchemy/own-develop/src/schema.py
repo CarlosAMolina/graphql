@@ -25,10 +25,9 @@ class UserConn(SQLAlchemyConnectionField):
     @classmethod
     def get_query(cls, model, info, **args):
         query = model.query
-        if "country" in args:
-            query = query.filter_by(country=args["country"])
-        sort = args.get("sort")
+
         # TODO replace with supper. SQLAlchemyConnectionField
+        sort = args.get("sort")
         import six
 
         if sort is not None:
@@ -36,6 +35,9 @@ class UserConn(SQLAlchemyConnectionField):
                 query = query.order_by(sort.value)
             else:
                 query = query.order_by(*(col.value for col in sort))
+
+        if "country" in args:
+            query = query.filter_by(country=args["country"])
         return query
 
 
