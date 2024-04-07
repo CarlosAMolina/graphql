@@ -161,6 +161,32 @@ class PaginationFilterableConnectionField(FilterableConnectionField):
         return query
 
 
+class AggregationFilterableConnectionField(FilterableConnectionField):
+    def __init__(self, *args, **kwargs):
+        self.kwargs = dict(**kwargs)
+        if "connection" not in kwargs:
+            raise ValueError("Connection must exists")
+        kwargs["args"] = {
+            "group_by": graphene.List(graphene.String),
+            "columns": graphene.List(graphene.String),
+            "labels": graphene.List(graphene.String),
+        }
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def get_query(cls, model, info, sort=None, **args):
+        query_to_return = super().get_query(model, info, sort, **args)
+        if "group_by" in args and args["group_by"] != []:
+            query_to_return = cls._apply_group_by_query(cls, query_to_return, model, args["group_by"])
+        g.custom_query = query_to_return
+        return query_to_return
+
+    def _apply_group_by_query(self, query, model, fields):
+        model_fields = [getattr(model, item) for item in fields]
+        query = query.group_by(*model_fields)
+        return query
+
+
 class Query(ObjectType):
     # I think it can be commented.
     # https://docs.graphene-python.org/en/latest/relay/nodes/#node-root-field
@@ -191,6 +217,7 @@ class Query(ObjectType):
     pagination_users = PaginationFilterableConnectionField(
         connection=UserObj, filters=UserFilter(), sort=UserObj.sort_argument()
     )
+    aggregation_users = AggregationFilterableConnectionField(connection=UserObj, filters=UserFilter(), sort=None)
 
     # our Resolver method takes the GraphQL context (root, info) as well as
     # Argument (first_name) for the Field and returns data for the query Response

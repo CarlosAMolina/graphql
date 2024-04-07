@@ -1,7 +1,7 @@
 meta {
-  name: hello_arguments
+  name: aggregation_users
   type: graphql
-  seq: 9
+  seq: 2
 }
 
 post {
@@ -11,12 +11,14 @@ post {
 }
 
 body:graphql {
-  query {
-    hello (firstName: "John")
+  {
+    aggregationUsers {
+      totalCount
+    }
   }
 }
 
 assert {
   res.status: eq 200
-  res.body.data.hello: eq Hello John!
+  res.body.data.aggregateUsersInt: eq 4
 }
