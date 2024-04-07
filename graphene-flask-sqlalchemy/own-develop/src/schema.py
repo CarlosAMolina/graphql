@@ -20,12 +20,11 @@ class User(SQLAlchemyObjectType):
 
 
 # Implement filtering: https://jeffersonheard.github.io/python/graphql/2018/12/08/graphene-python.html
-# Sort must be disabled when using in the query.
+# I have modified the code in the previous URL to work with sort.
 class UserConn(SQLAlchemyConnectionField):
     @classmethod
     def get_query(cls, model, info, **args):
-        query = model.query
-        query = super().get_query(model=model, info=info, sort=args.get("sort"))  # , *args)
+        query = super().get_query(model, info, args.get("sort"))
         if "country" in args:
             query = query.filter_by(country=args["country"])
         return query
