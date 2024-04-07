@@ -24,7 +24,8 @@ class User(SQLAlchemyObjectType):
 class UserConn(SQLAlchemyConnectionField):
     @classmethod
     def get_query(cls, model, info, **args):
-        query = super().get_query(model, info, args.get("sort"))
+        sort = args.pop("sort", None)
+        query = super().get_query(model, info, sort, **args)
         if "country" in args:
             query = query.filter_by(country=args["country"])
         return query
