@@ -25,8 +25,17 @@ class UserConn(SQLAlchemyConnectionField):
     @classmethod
     def get_query(cls, model, info, **args):
         query = model.query
-        if "name" in args:
-            query = query.filter_by(name=args["name"])
+        if "country" in args:
+            query = query.filter_by(country=args["country"])
+        sort = args.get("sort")
+        # TODO replace with supper. SQLAlchemyConnectionField
+        import six
+
+        if sort is not None:
+            if isinstance(sort, six.string_types):
+                query = query.order_by(sort.value)
+            else:
+                query = query.order_by(*(col.value for col in sort))
         return query
 
 
@@ -44,7 +53,13 @@ class Query(ObjectType):
     # Sort query example:
     # https://github.com/graphql-python/graphene-sqlalchemy/blob/master/examples/flask_sqlalchemy/app.py
     all_users = SQLAlchemyConnectionField(User.connection)
-    all_users_filter = UserConn(User, sort=None, args={"name": graphene.Argument(graphene.String)})
+    all_users_filter = UserConn(
+        User,
+        args={
+            "country": graphene.Argument(graphene.String),
+            "sort": graphene.Argument(graphene.List(User.sort_enum())),
+        },
+    )
     """
     Examples of aggregation in GraphQL:
     https://dgraph.io/docs/graphql/queries/aggregate/

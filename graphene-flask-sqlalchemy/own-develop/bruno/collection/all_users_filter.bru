@@ -12,13 +12,14 @@ post {
 
 body:graphql {
   {
-    allUsersFilter(name: "Al") {
+    allUsersFilter(country: "Spain", sort: [NAME_DESC]) {
       edges {
         node {
           id,
           name,
           age,
-          creationDateTime
+          creationDateTime,
+          country
         }
       }
     }

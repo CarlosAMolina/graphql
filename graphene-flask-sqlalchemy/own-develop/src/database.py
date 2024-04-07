@@ -27,17 +27,20 @@ users_data = [
         "name": "John",
         "age": 20,
         "creation_date_time": datetime.datetime(2024, 3, 20, 17, 20, 40),
+        "country": "Spain",
     },
     {
         "id": 2,
         "name": "Jane",
         "age": 21,
         "creation_date_time": datetime.datetime(2023, 6, 17, 8, 15, 23),
+        "country": "France",
     },
     {
         "id": 3,
         "name": "Al",
         "creation_date_time": datetime.datetime(2024, 10, 5, 8, 20, 23),
+        "country": "Spain",
     },
     {
         "id": 4,
@@ -60,6 +63,7 @@ def _insert_db_data():
             name=user_data["name"],
             age=user_data.get("age"),
             creation_date_time=user_data["creation_date_time"],
+            country=user_data.get("country"),
         )
         for user_data in users_data
     ]

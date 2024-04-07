@@ -13,6 +13,7 @@ Base.query = database.db_session.query_property()
 class UserModel(Base):
     __tablename__ = "user"
     id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column(sa.String)
+    name = sa.Column(sa.String, nullable=False)
     age = sa.Column(sa.Integer)
-    creation_date_time = sa.Column(sa.DateTime)
+    creation_date_time = sa.Column(sa.DateTime, nullable=False)
+    country = sa.Column(sa.String)
