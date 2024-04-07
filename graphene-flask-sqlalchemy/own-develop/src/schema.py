@@ -188,7 +188,7 @@ class Query(ObjectType):
     https://developer.salesforce.com/docs/platform/graphql/guide/aggregate-examples.html
     """
     aggregate_users_int = Int(function_=String())
-    aggregate_users = PaginationFilterableConnectionField(
+    pagination_users = PaginationFilterableConnectionField(
         connection=UserObj, filters=UserFilter(), sort=UserObj.sort_argument()
     )
 
