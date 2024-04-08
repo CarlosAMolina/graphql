@@ -60,11 +60,11 @@ class AggregationConnection(graphene.relay.Connection):
     date_time = graphene.DateTime()
 
     @staticmethod
-    def resolve_integer(root, info, *args, **kwargs) -> int:
+    def resolve_integer(root, info, *args, **kwargs) -> tp.Optional[int]:
         return AggregationConnection._get_aggregation_result()
 
     @staticmethod
-    def resolve_date_time(root, info, *args, **kwargs) -> datetime.datetime:
+    def resolve_date_time(root, info, *args, **kwargs) -> tp.Optional[datetime.datetime]:
         return AggregationConnection._get_aggregation_result()
 
     @staticmethod
