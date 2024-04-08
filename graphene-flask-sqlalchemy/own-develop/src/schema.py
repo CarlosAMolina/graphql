@@ -61,12 +61,14 @@ class AggregationConnection(graphene.relay.Connection):
 
     @staticmethod
     def resolve_integer(root, info, *args, **kwargs) -> int:
-        query = g.custom_query
-        result = query.one()[0]
-        return result
+        return AggregationConnection._get_aggregation_result()
 
     @staticmethod
     def resolve_date_time(root, info, *args, **kwargs) -> datetime.datetime:
+        return AggregationConnection._get_aggregation_result()
+
+    @staticmethod
+    def _get_aggregation_result() -> tp.Optional[tp.Union[int, datetime.datetime]]:
         query = g.custom_query
         result = query.one()[0]
         return result
