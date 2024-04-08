@@ -12,7 +12,7 @@ post {
 
 body:graphql {
   {
-    aggregationUsers(aggregationAndField:["max", "age"]) {
+    aggregationUsers(filters: {name: "Jane"}, aggregationAndField:["max", "age"]) {
       integer
     }
   }
@@ -20,5 +20,5 @@ body:graphql {
 
 assert {
   res.status: eq 200
-  res.body.data.aggregateUsers.integer: eq 41
+  res.body.data.aggregateUsers.integer: eq 21
 }
