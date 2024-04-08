@@ -43,13 +43,19 @@ class CountableConnection(graphene.relay.Connection):
         abstract = True
 
     totalCount = graphene.Int()
-    integer = graphene.Int()
 
     @staticmethod
     def resolve_totalCount(root, info, *args, **kwargs) -> int:
         query = g.custom_query
         result = query.count()
         return result
+
+
+class AggregationConnection(graphene.relay.Connection):
+    class Meta:
+        abstract = True
+
+    integer = graphene.Int()
 
     @staticmethod
     def resolve_integer(root, info, *args, **kwargs) -> int:
@@ -96,7 +102,51 @@ class CountableSQLAlchemyObjectType(SQLAlchemyObjectType):
         )
 
 
+class AggregationSQLAlchemyObjectType(SQLAlchemyObjectType):
+    class Meta:
+        abstract = True
+
+    @classmethod
+    def __init_subclass_with_meta__(
+        cls,
+        model=None,
+        registry=None,
+        skip_registry=False,
+        only_fields=(),
+        exclude_fields=(),
+        connection=None,
+        connection_class=AggregationConnection,
+        use_connection=None,
+        interfaces=(),
+        id=None,
+        connection_field_factory=default_connection_field_factory,  # TODO try not use default_connection_field_factory
+        _meta=None,
+        **options,
+    ):
+        super().__init_subclass_with_meta__(
+            model,
+            registry,
+            skip_registry,
+            only_fields,
+            exclude_fields,
+            connection,
+            connection_class,
+            use_connection,
+            interfaces,
+            id,
+            connection_field_factory,
+            _meta,
+            **options,
+        )
+
+
 class UserObj(CountableSQLAlchemyObjectType):
+    class Meta:
+        model = models.UserModel
+        interfaces = (graphene.relay.Node,)
+
+
+class UserAggregationObj(AggregationSQLAlchemyObjectType):
     class Meta:
         model = models.UserModel
         interfaces = (graphene.relay.Node,)
@@ -238,7 +288,10 @@ class Query(ObjectType):
     pagination_users = PaginationFilterableConnectionField(
         connection=UserObj, filters=UserFilter(), sort=UserObj.sort_argument()
     )
-    aggregation_users = AggregationFilterableConnectionField(connection=UserObj, filters=UserFilter(), sort=None)
+    # TODO try apply filters
+    aggregation_users = AggregationFilterableConnectionField(
+        connection=UserAggregationObj, filters=UserFilter(), sort=None
+    )
 
     # our Resolver method takes the GraphQL context (root, info) as well as
     # Argument (first_name) for the Field and returns data for the query Response

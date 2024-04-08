@@ -13,13 +13,12 @@ post {
 body:graphql {
   {
     aggregationUsers(aggregationAndField:["max", "age"]) {
-      integer,
-      totalCount
+      integer
     }
   }
 }
 
 assert {
   res.status: eq 200
-  res.body.data.aggregateUsersInt: eq 4
+  res.body.data.aggregateUsers.integer: eq 41
 }
