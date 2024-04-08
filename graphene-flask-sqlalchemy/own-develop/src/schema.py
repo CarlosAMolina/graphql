@@ -119,7 +119,7 @@ class AggregationSQLAlchemyObjectType(SQLAlchemyObjectType):
         use_connection=None,
         interfaces=(),
         id=None,
-        connection_field_factory=default_connection_field_factory,  # TODO try not use default_connection_field_factory
+        connection_field_factory=None,
         _meta=None,
         **options,
     ):
