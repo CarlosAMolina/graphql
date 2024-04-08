@@ -12,8 +12,9 @@ post {
 
 body:graphql {
   {
-    aggregationUsers(columns:"foo") {
-      maxInt
+    aggregationUsers(aggregationAndField:["max", "age"]) {
+      integer,
+      totalCount
     }
   }
 }
