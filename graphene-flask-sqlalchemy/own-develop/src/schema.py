@@ -221,13 +221,12 @@ class AggregationFilterableConnectionField(FilterableConnectionField):
     @classmethod
     def get_query(cls, model, info, sort=None, **args):
         query_to_return = super().get_query(model, info, sort, **args)
-        if "aggregation_and_field" in args and args["aggregation_and_field"] != []:
-            query_to_return = cls._apply_aggregation(cls, query_to_return, model, args["aggregation_and_field"])
+        aggregation, field = args["aggregation_and_field"][0:2]
+        query_to_return = cls._apply_aggregation(cls, query_to_return, model, aggregation, field)
         g.custom_query = query_to_return
         return query_to_return
 
-    def _apply_aggregation(self, query, model, aggregation_and_field: tp.List[str]):
-        aggregation, field = aggregation_and_field[0], aggregation_and_field[1]
+    def _apply_aggregation(self, query, model, aggregation: str, field: str):
         entity = getattr(model, field)
         if aggregation == "max":
             return query.with_entities(func.max(entity))
