@@ -214,7 +214,6 @@ class AggregationFilterableConnectionField(FilterableConnectionField):
         if "connection" not in kwargs:
             raise ValueError("Connection must exists")
         kwargs["args"] = {
-            "group_by": graphene.List(graphene.String),
             "aggregation_and_field": graphene.List(graphene.String),
         }
         super().__init__(*args, **kwargs)
@@ -222,18 +221,10 @@ class AggregationFilterableConnectionField(FilterableConnectionField):
     @classmethod
     def get_query(cls, model, info, sort=None, **args):
         query_to_return = super().get_query(model, info, sort, **args)
-
-        if "group_by" in args and args["group_by"] != []:
-            query_to_return = cls._apply_group_by_query(cls, query_to_return, model, args["group_by"])
         if "aggregation_and_field" in args and args["aggregation_and_field"] != []:
             query_to_return = cls._apply_aggregation(cls, query_to_return, model, args["aggregation_and_field"])
         g.custom_query = query_to_return
         return query_to_return
-
-    def _apply_group_by_query(self, query, model, fields):
-        model_fields = [getattr(model, item) for item in fields]
-        query = query.group_by(*model_fields)
-        return query
 
     def _apply_aggregation(self, query, model, aggregation_and_field: tp.List[str]):
         aggregation, field = aggregation_and_field[0], aggregation_and_field[1]
@@ -275,7 +266,6 @@ class Query(ObjectType):
     pagination_users = PaginationFilterableConnectionField(
         connection=UserObj, filters=UserFilter(), sort=UserObj.sort_argument()
     )
-    # TODO try apply filters
     aggregation_users = AggregationFilterableConnectionField(
         connection=UserAggregationObj, filters=UserFilter(), sort=None
     )
