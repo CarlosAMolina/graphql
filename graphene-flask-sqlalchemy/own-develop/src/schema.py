@@ -109,36 +109,11 @@ class AggregationSQLAlchemyObjectType(SQLAlchemyObjectType):
     @classmethod
     def __init_subclass_with_meta__(
         cls,
-        model=None,
-        registry=None,
-        skip_registry=False,
-        only_fields=(),
-        exclude_fields=(),
-        connection=None,
-        connection_class=AggregationConnection,
-        use_connection=None,
-        interfaces=(),
-        id=None,
-        batching=False,
-        connection_field_factory=None,
-        _meta=None,
-        **options,
+        **args,
     ):
         super().__init_subclass_with_meta__(
-            model,
-            registry,
-            skip_registry,
-            only_fields,
-            exclude_fields,
-            connection,
-            connection_class,
-            use_connection,
-            interfaces,
-            id,
-            batching,
-            connection_field_factory,
-            _meta,
-            **options,
+            **args,
+            connection_class=AggregationConnection,
         )
 
 
