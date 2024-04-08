@@ -203,6 +203,8 @@ class AggregationFilterableConnectionField(FilterableConnectionField):
         entity = getattr(model, field)
         if aggregation == "max":
             return query.with_entities(func.max(entity))
+        if aggregation == "min":
+            return query.with_entities(func.min(entity))
         raise ValueError(aggregation)
 
 
