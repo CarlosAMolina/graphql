@@ -1,3 +1,4 @@
+import datetime
 import typing as tp
 
 from flask import g
@@ -56,9 +57,16 @@ class AggregationConnection(graphene.relay.Connection):
         abstract = True
 
     integer = graphene.Int()
+    date_time = graphene.DateTime()
 
     @staticmethod
     def resolve_integer(root, info, *args, **kwargs) -> int:
+        query = g.custom_query
+        result = query.one()[0]
+        return result
+
+    @staticmethod
+    def resolve_date_time(root, info, *args, **kwargs) -> datetime.datetime:
         query = g.custom_query
         result = query.one()[0]
         return result
