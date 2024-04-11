@@ -1,4 +1,5 @@
 import database
+import datetime
 import typing as tp
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -26,3 +27,9 @@ class UserModel(Base):
             return None
         else:
             return self.age > 18
+
+    @hybrid_property
+    def days_passed_since_creation(self) -> int:
+        difference = datetime.datetime.now() - self.creation_date_time
+        result = difference.days
+        return result
