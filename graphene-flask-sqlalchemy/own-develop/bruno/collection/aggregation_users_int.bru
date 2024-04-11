@@ -1,5 +1,5 @@
 meta {
-  name: aggregation_users_int
+  name: aggregate_users_int
   type: graphql
   seq: 3
 }
@@ -12,7 +12,7 @@ post {
 
 body:graphql {
   {
-    aggregationUsers(filters: {country: "Spain"}, aggregationAndField:["max", "age"]) {
+    aggregateUsers(filters: {country: "Spain"}, aggregateAndField:["max", "age"]) {
       integer
     }
   }
@@ -20,5 +20,5 @@ body:graphql {
 
 assert {
   res.status: eq 200
-  res.body.data.aggregationUsers.integer: eq 20
+  res.body.data.aggregateUsers.integer: eq 20
 }

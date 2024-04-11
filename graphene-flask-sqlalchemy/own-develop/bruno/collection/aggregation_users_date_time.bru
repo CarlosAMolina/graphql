@@ -1,5 +1,5 @@
 meta {
-  name: aggregation_users_date_time
+  name: aggregate_users_date_time
   type: graphql
   seq: 2
 }
@@ -12,7 +12,7 @@ post {
 
 body:graphql {
   {
-    aggregationUsers(filters: {country: "Spain"}, aggregationAndField:["min", "creation_date_time"]) {
+    aggregateUsers(filters: {country: "Spain"}, aggregateAndField:["min", "creation_date_time"]) {
       dateTime
     }
   }
@@ -20,5 +20,5 @@ body:graphql {
 
 assert {
   res.status: eq 200
-  res.body.data.aggregationUsers.dateTime: eq 2024-03-20T17:20:40
+  res.body.data.aggregateUsers.dateTime: eq 2024-03-20T17:20:40
 }

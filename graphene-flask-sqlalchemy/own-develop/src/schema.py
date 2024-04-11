@@ -52,7 +52,7 @@ class CountableConnection(graphene.relay.Connection):
         return result
 
 
-class AggregationConnection(graphene.relay.Connection):
+class AggregateConnection(graphene.relay.Connection):
     class Meta:
         abstract = True
 
@@ -61,14 +61,14 @@ class AggregationConnection(graphene.relay.Connection):
 
     @staticmethod
     def resolve_integer(root, info, *args, **kwargs) -> tp.Optional[int]:
-        return AggregationConnection._get_aggregation_result()
+        return AggregateConnection._get_aggregate_result()
 
     @staticmethod
     def resolve_date_time(root, info, *args, **kwargs) -> tp.Optional[datetime.datetime]:
-        return AggregationConnection._get_aggregation_result()
+        return AggregateConnection._get_aggregate_result()
 
     @staticmethod
-    def _get_aggregation_result() -> tp.Optional[tp.Union[int, datetime.datetime]]:
+    def _get_aggregate_result() -> tp.Optional[tp.Union[int, datetime.datetime]]:
         query = g.custom_query
         result = query.one()[0]
         return result
@@ -112,7 +112,7 @@ class CountableSQLAlchemyObjectType(SQLAlchemyObjectType):
         )
 
 
-class AggregationSQLAlchemyObjectType(SQLAlchemyObjectType):
+class AggregateSQLAlchemyObjectType(SQLAlchemyObjectType):
     class Meta:
         abstract = True
 
@@ -123,7 +123,7 @@ class AggregationSQLAlchemyObjectType(SQLAlchemyObjectType):
     ):
         super().__init_subclass_with_meta__(
             **args,
-            connection_class=AggregationConnection,
+            connection_class=AggregateConnection,
         )
 
 
@@ -133,7 +133,7 @@ class UserObj(CountableSQLAlchemyObjectType):
         interfaces = (graphene.relay.Node,)
 
 
-class UserAggregationObj(AggregationSQLAlchemyObjectType):
+class UserAggregateObj(AggregateSQLAlchemyObjectType):
     class Meta:
         model = models.UserModel
         interfaces = (graphene.relay.Node,)
@@ -178,7 +178,6 @@ class PaginationFilterableConnectionField(FilterableConnectionField):
         kwargs["args"] = {
             "limit": graphene.Int(),
             "offset": graphene.Int(),
-            "doquery": graphene.Boolean(),
             "group_by": graphene.List(graphene.String),
             "columns": graphene.List(graphene.String),
             "labels": graphene.List(graphene.String),
@@ -191,9 +190,8 @@ class PaginationFilterableConnectionField(FilterableConnectionField):
         if "group_by" in args and args["group_by"] != []:
             query_to_return = cls._apply_group_by_query(cls, query_to_return, model, args["group_by"])
         query_to_return = cls._add_limit_and_offset_to_query(cls, query_to_return, **args)
-        if "doquery" in args:
-            g.custom_query = query_to_return
-        return query_to_return if args.get("doquery", True) else []
+        g.custom_query = query_to_return
+        return query_to_return
 
     def _add_limit_and_offset_to_query(self, query, **args):
         if "limit" in args:
@@ -208,31 +206,31 @@ class PaginationFilterableConnectionField(FilterableConnectionField):
         return query
 
 
-class AggregationFilterableConnectionField(FilterableConnectionField):
+class AggregateFilterableConnectionField(FilterableConnectionField):
     def __init__(self, *args, **kwargs):
         self.kwargs = dict(**kwargs)
         if "connection" not in kwargs:
             raise ValueError("Connection must exists")
         kwargs["args"] = {
-            "aggregation_and_field": graphene.List(graphene.String),
+            "aggregate_and_field": graphene.List(graphene.String),
         }
         super().__init__(*args, **kwargs)
 
     @classmethod
     def get_query(cls, model, info, sort=None, **args):
         query_to_return = super().get_query(model, info, sort, **args)
-        aggregation, field = args["aggregation_and_field"][0:2]
-        query_to_return = cls._apply_aggregation(cls, query_to_return, model, aggregation, field)
+        aggregate, field = args["aggregate_and_field"][0:2]
+        query_to_return = cls._apply_aggregate(cls, query_to_return, model, aggregate, field)
         g.custom_query = query_to_return
         return query_to_return
 
-    def _apply_aggregation(self, query, model, aggregation: str, field: str):
+    def _apply_aggregate(self, query, model, aggregate: str, field: str):
         entity = getattr(model, field)
-        if aggregation == "max":
+        if aggregate == "max":
             return query.with_entities(func.max(entity))
-        if aggregation == "min":
+        if aggregate == "min":
             return query.with_entities(func.min(entity))
-        raise ValueError(aggregation)
+        raise ValueError(aggregate)
 
 
 class Query(ObjectType):
@@ -257,7 +255,7 @@ class Query(ObjectType):
         },
     )
     """
-    Examples of aggregation in GraphQL:
+    Examples of aggregate functions in GraphQL:
     https://dgraph.io/docs/graphql/queries/aggregate/
     https://developer.salesforce.com/docs/platform/graphql/guide/aggregate-examples.html
     """
@@ -265,9 +263,7 @@ class Query(ObjectType):
     pagination_users = PaginationFilterableConnectionField(
         connection=UserObj, filters=UserFilter(), sort=UserObj.sort_argument()
     )
-    aggregation_users = AggregationFilterableConnectionField(
-        connection=UserAggregationObj, filters=UserFilter(), sort=None
-    )
+    aggregate_users = AggregateFilterableConnectionField(connection=UserAggregateObj, filters=UserFilter(), sort=None)
 
     # our Resolver method takes the GraphQL context (root, info) as well as
     # Argument (first_name) for the Field and returns data for the query Response
