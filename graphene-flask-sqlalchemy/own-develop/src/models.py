@@ -1,7 +1,9 @@
-from sqlalchemy.ext.declarative import declarative_base
-import sqlalchemy as sa
-
 import database
+import typing as tp
+
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property
+import sqlalchemy as sa
 
 
 Base = declarative_base()
@@ -17,3 +19,10 @@ class UserModel(Base):
     age = sa.Column(sa.Integer)
     creation_date_time = sa.Column(sa.DateTime, nullable=False)
     country = sa.Column(sa.String)
+
+    @hybrid_property
+    def is_adult(self) -> tp.Optional[bool]:
+        if self.age is None:
+            return None
+        else:
+            return self.age > 18
